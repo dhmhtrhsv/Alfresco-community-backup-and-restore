@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome file</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="backup-process-of-alfresco-community-website-with-cobian">Backup process of Alfresco community website with Cobian</h1>
+<h2 id="initial-process">Initial process</h2>
+<ol>
+<li>From the alfresco-global.properties (in folder C:\alfresco-community\tomcat\shared\classes) find the dir.root (e.g. C:/ALFRES~1/alf_data)</li>
+<li>If it doesn’t exist, create a folder solr4Backup inside the dir.root (e.g. inside the directory C:\alfresco-community\alf_data)</li>
+<li>The folders: alfresco and archive are automatically copied in the solr4Backup folder. For futher information visit <a href="https://docs.alfresco.com/5.2/tasks/backup-hot.html">https://docs.alfresco.com/5.2/tasks/backup-hot.html</a></li>
+<li>If it doesn’t exist, create a file with name pgpass.conf inside the C:\alfresco-community\postgresql\bin with the following format (replace the password with the db.password found in the alfresco-global.properties):<pre><code>#hostname:port:database:username:password
+127.0.0.1:5432:alfresco:alfresco:12345
+</code></pre>
+</li>
+<li>Create a folder inside the C with name AlfrescoBackup (i.e. C:\AlfrescoBackup)</li>
+</ol>
+<h2 id="cobian-process">Cobian process</h2>
+<ol>
+<li>Install Cobian from <a href="https://www.cobiansoft.com/">https://www.cobiansoft.com/</a></li>
+<li>Run Cobian</li>
+<li>Create a new task</li>
+<li>Select General:
+<ul>
+<li>Give a task name, e.g. AlfrescoBackup</li>
+<li>Backup Type Full</li>
+</ul>
+</li>
+<li>Select Files:
+<ul>
+<li>Source files-directories:
+<ul>
+<li>C:\alfresco-community\alf_data\solr4Backup</li>
+<li>C:\AlfrescoBackup\pg_dump.sql</li>
+<li>C:\alfresco-community\alf_data\contentstore</li>
+</ul>
+</li>
+<li>Destination files-directories:
+<ul>
+<li>C:\AlfrescoBackup</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Select Schedule:
+<ul>
+<li>Daily, Time 04:00:00 AM</li>
+</ul>
+</li>
+<li>Select Dynamics:
+<ul>
+<li>2 Full copies to keep</li>
+</ul>
+</li>
+<li>Select Archive:
+<ul>
+<li>Compression Type: Zip compression</li>
+</ul>
+</li>
+<li>Select Events:
+<ul>
+<li>Pre-backup events
+<ul>
+<li>Execute C:\AlfrescoBackup\AlfrescoBackup.bat, that has the code:<pre><code>:: Set backup Folder
+set root_backup=C:\AlfrescoBackup\
+:: Set Alfresco Folder
+set alfresco_folder=C:\alfresco-community\
+:: Create db dump
+cd %alfresco_folder%postgresql\bin
+SET PGPASSFILE=%alfresco_folder%postgresql\bin\pgpass.conf
+pg_dump -h 127.0.0.1 -p 5432 -U alfresco -f %root_backup%pg_dump.sql
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Select ok</li>
+</ol>
+</div>
+</body>
+
+</html>
