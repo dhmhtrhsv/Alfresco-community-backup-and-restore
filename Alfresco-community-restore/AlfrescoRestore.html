@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome file</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="restore-process-of-alfresco-community-website">Restore process of Alfresco community website</h1>
+<h2 id="restore-process">Restore process</h2>
+<ol>
+<li>
+<p>Create a new vm</p>
+</li>
+<li>
+<p>Install alfresco community</p>
+</li>
+<li>
+<p>Start only Postgres from the Alfresco Community Manager Tool</p>
+</li>
+<li>
+<p>Start cmd (Linux: Terminal)</p>
+</li>
+<li>
+<p>Type</p>
+<pre><code>cd C:\alfresco-community\postgresql\bin
+</code></pre>
+<p>or for Linux</p>
+<pre><code>cd /opt/alfresco-community/postgresql/bin/
+</code></pre>
+</li>
+<li>
+<p>Type</p>
+<pre><code>psql -U postgres
+</code></pre>
+<p>or for Linux</p>
+<pre><code>./psql
+</code></pre>
+</li>
+<li>
+<p>Type</p>
+<pre><code>/list
+</code></pre>
+<p>to see the existing databases.</p>
+</li>
+<li>
+<p>Type the password from the database you have already (It is in the alfresco-global.properties file. See the backup process.)</p>
+</li>
+<li>
+<p>Type</p>
+<pre><code>drop database alfresco;
+</code></pre>
+<p>If there is a mistake, press enter and then type again the command.</p>
+</li>
+<li>
+<p>Check if it is deleted. Type:</p>
+<pre><code>\list
+</code></pre>
+</li>
+<li>
+<p>Type</p>
+<pre><code>create database alfresco;
+</code></pre>
+<p>If there is a mistake, press enter and then type again the command.</p>
+</li>
+<li>
+<p>Check if it is created. Type:</p>
+<pre><code>\list
+</code></pre>
+</li>
+<li>
+<p>Type</p>
+<pre><code>\q
+</code></pre>
+</li>
+<li>
+<p>Unzip the content of the Backup process (i.e. solr4Backup folder, contentstore folder, pg_dump.sql) in a folder of your choice (i.e. C:\Users\dimitris\Downloads)</p>
+</li>
+<li>
+<p>Type editing your path appropriately:</p>
+<pre><code>psql -U alfresco -d alfresco -f C:\Users\dimitris\Downloads\AlfrescoBackup\pg_dump.sql
+</code></pre>
+<p>in order to restore the database.</p>
+</li>
+<li>
+<p>In the C:\alfresco-community\alf_data (Linux: /opt/alfresco-community/alf_data), replace:</p>
+<ul>
+<li>the folder contentstore with the contentstore of the backup folder</li>
+<li>the content of the folder \solr4\index\archive\SpacesStore\index with the content of the solr4Backup\archive\“snapshotNumber”</li>
+<li>the content of the folder \solr4\index\ workspace\SpacesStore\index with the content of the solr4Backup\workspace\“snapshotNumber”</li>
+</ul>
+<p>The snapshotNumbers should be the same or the ones which are nearest to each other.</p>
+</li>
+<li>
+<p>Restart Alfresco</p>
+</li>
+</ol>
+</div>
+</body>
+
+</html>
